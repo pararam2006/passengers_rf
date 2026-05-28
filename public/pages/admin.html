@@ -43,7 +43,7 @@
                         <td>${formatDate(app.start_date)}</td>
                         <td>${app.payment_method}</td>
                         <td>
-                            <select id="status-${app.id}"
+                            <select id="status-${app.id}">
                                 <option value="Новая"
                                     ${app.status === 'Новая' ? 'selected' : ''}>
                                     Новая

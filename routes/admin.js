@@ -25,7 +25,7 @@ router.post('/status/:id', checkAdmin, async (req, res) => {
     const { status } = req.body
 
     await pool.query(
-        'UPDATE applications SET status $1 WHERE id = $2', 
+        'UPDATE applications SET status = $1 WHERE id = $2', 
         [status, req.params.id]
     )
 

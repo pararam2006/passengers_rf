@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
 
     await pool.query(
         `INSERT INTO users (login, password_hash, full_name, birth_date, phone, email) VALUES ($1, $2, $3, $4, $5, $6)`,
-        [login, password_hash, full_name, birth_date, phone, email]
+        [login, hash, full_name, birth_date, phone, email]
     )
 
     res.redirect('/pages/login.html')
