@@ -24,6 +24,10 @@ app.use('/auth', authRoutes)
 app.use('/applications', applicationsRoutes)
 app.use('/admin', adminRoutes)
 
+app.get('/', (req, res) => {
+    res.redirect('/pages/login.html')
+})
+
 app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`)
 })

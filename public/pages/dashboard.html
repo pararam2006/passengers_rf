@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Личный кабинет</h1>
+        <a class="main-button" href="application.html">
+            Создать заявку
+        </a>
+        <a class="logout-button" href="/auth/logout">
+            Выйти
+        </a>
+
+        <h2>Мои заявки</h2>
+
+        <div id="applications">
+            Здесь отображаются заявки пользователя
+        </div>
+    </div>
+    <script>
+       
+    loadApplications();
+
+    async function loadApplications() {
+
+        try {
+
+            const response = await fetch('/applications/my');
+
+            if (response.status === 401) {
+
+                alert('Необходимо войти');
+
+                window.location.href =
+                    '/pages/login.html';
+
+                return;
+            }
+
+            const applications = await response.json();
+
+            const container =
+                document.getElementById('applications');
+
+            container.innerHTML = '';
+
+            if (applications.length === 0) {
+
+                container.innerHTML = `
+                    <p>
+                        У вас пока нет заявок
+                    </p>
+                `;
+
+                return;
+            }
+
+            applications.forEach(app => {
+
+                const card =
+                    document.createElement('div');
+
+                card.className = 'application-card';
+
+                card.innerHTML = `
+
+                    <h3>
+                        ${app.transport_type}
+                    </h3>
+
+                    <p>
+                        <strong>Дата обучения:</strong>
+                        ${formatDate(app.start_date)}
+                    </p>
+
+                    <p>
+                        <strong>Способ оплаты:</strong>
+                        ${app.payment_method}
+                    </p>
+
+                    <p>
+                        <strong>Статус:</strong>
+                        ${app.status}
+                    </p>
+
+                    <h4>Оставить отзыв</h4>
+
+                    <textarea
+                        id="review-${app.id}"
+                        placeholder="Введите отзыв"
+                    ></textarea>
+
+                    <button
+                        onclick="sendReview(${app.id})"
+                    >
+                        Отправить отзыв
+                    </button>
+
+                `;
+
+                container.appendChild(card);
+            });
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert('Ошибка загрузки заявок');
+        }
+    }
+
+    async function sendReview(applicationId) {
+
+        const text = document.getElementById(
+            `review-${applicationId}`
+        ).value;
+
+        if (!text.trim()) {
+
+            alert('Введите отзыв');
+
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                '/applications/review',
+                {
+
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+
+                    body: JSON.stringify({
+
+                        application_id: applicationId,
+
+                        review_text: text
+                    })
+                }
+            );
+
+            const result = await response.text();
+
+            alert(result);
+
+            document.getElementById(
+                `review-${applicationId}`
+            ).value = '';
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert('Ошибка отправки отзыва');
+        }
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('ru-RU');
+    }
+    </script>
+</body>
+</html>

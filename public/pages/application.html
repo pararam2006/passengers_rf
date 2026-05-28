@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание заявок</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Запись на обучение</h1>
+        <form action="/applications/create" method="post">
+            <select name="transport_type">
+                <option>Автобус</option>
+                <option>Электробус</option>
+                <option>Трамвай</option>
+            </select>
+            <input type="date" name="start_date" required>
+            <select name="payment_method">
+                <option>Карта</option>
+                <option>Наличные</option>
+                <option>Рассрочка</option>
+            </select>
+            <button type="submit">Отправить заявку</button>
+        </form>
+    </div>
+</body> 
+</html>

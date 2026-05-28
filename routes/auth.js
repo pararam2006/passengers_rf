@@ -71,4 +71,10 @@ router.post('/login', async (req, res) => {
     res.redirect('/pages/dashboard.html')
 })
 
+router.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/pages/login.html')
+    })
+})
+
 module.exports = router
